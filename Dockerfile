@@ -1,7 +1,6 @@
 FROM eclipse-temurin:17-jdk AS build
 COPY . /app
 WORKDIR /app
-RUN ./gradlew clean
 RUN ./gradlew bootJar
 RUN mv -f build/libs/tupropiedad-0.0.1-SNAPSHOT.jar app.jar
 
