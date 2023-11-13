@@ -1,13 +1,8 @@
-FROM eclipse-temurin:17-jdk AS build
-COPY . /app
-WORKDIR /app
-RUN ./gradlew bootJar
-RUN mv -f build/libs/tupropiedad-0.0.1-SNAPSHOT.jar app.jar
-
-FROM eclipse-temurin:17-jre
+FROM openjdk:17-jdk-alpine
+RUN apk update && apk add --no-cache bash
+ARG JAR_FILE=build/libs/*.jar
+RUN gradle build
 ARG PORT
 ENV PORT=${PORT}
-COPY --from=build /app/app.jar .
-RUN useradd runtime
-USER runtime
+COPY ${JAR_FILE} app.jar
 ENTRYPOINT [ "java", "-Dserver.port=${PORT}", "-jar", "app.jar" ]
